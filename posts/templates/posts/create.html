@@ -1,0 +1,18 @@
+<!-- FILEPATH: /c:/Users/Efosa/dev/projects/Ayfolut/blogging_platform/blog_folut/posts/templates/posts/create.html -->
+
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="container">
+    <h1>Create a new post</h1>
+    <form method="POST" action="{% url 'posts:post_create' %}" enctype='multipart/form-data'>
+        {% csrf_token %}
+        <div class="form-group">
+            {{form | crispy}}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+{% endblock %}

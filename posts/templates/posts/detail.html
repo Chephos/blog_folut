@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+
+                <div class="card-header">
+                    <h3>{{ post.title }}</h3>
+                    <small>by {{ post.author.username }} on {{ post.published_at|date:"F d, Y" }}</small>
+                    <img src="{{ post.cover_photo.url }}" class="card-img-top" alt="{{ post.title }}">
+                </div>
+                <div class="card-body">
+                    <p>{{ post.content }}</p>
+                </div>
+                {% if user.is_authenticated and user == post.author %}
+                <div class="card-footer">
+                    <a href="{% url 'posts:post_update' post.slug %}" class="btn btn-primary">Edit</a>
+                    <form action="{% url 'posts:post_delete' post.slug %}" method="POST" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

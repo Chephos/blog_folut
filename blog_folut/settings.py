@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users",
     "crispy_forms",
     "crispy_bootstrap4",
     "taggit",
+    "users",
+    "posts",
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,9 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -138,3 +142,5 @@ AUTH_USER_MODEL = "users.User"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 TAGGIT_CASE_INSENSITIVE = True
+
+LOGIN_REDIRECT_URL = "posts:post_list"

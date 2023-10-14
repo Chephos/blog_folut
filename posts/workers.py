@@ -16,6 +16,7 @@ class Post:
         post = get_object_or_404(models.Post, id=post_id)
         return post
 
+    @staticmethod
     def get_post_by_slug(post_slug: str):
         """
         Gets post by slug
@@ -27,7 +28,9 @@ class Post:
         return post
 
     @staticmethod
-    def create_post(user, title, subtitle, cover_photo, content, category, tags):
+    def create_post(
+        user, title, subtitle, cover_photo, content, category, tags, is_published
+    ):
         """
         Creates a post
         :param user: user who created the post
@@ -46,22 +49,10 @@ class Post:
             cover_photo=cover_photo,
             content=content,
             category=category,
+            is_published=is_published,
             tags=tags,
         )
         return post
-
-    @staticmethod
-    def publish_post(post_id: int):
-        """
-        Publishes a post
-        :param post_id: id of the post
-        :return: None
-        """
-        post = Post._get_post_by_id(post_id)
-        if post.is_published == False:
-            post.is_published = True
-            post.published_at = timezone.now()
-            post.save()
 
     @staticmethod
     def update_post(
@@ -72,6 +63,7 @@ class Post:
         content: str,
         category: str,
         tags,
+        is_published: bool,
     ):
         """
         Updates a post
@@ -90,7 +82,8 @@ class Post:
         post.cover_photo = cover_photo
         post.content = content
         post.category = category
-        post.tags = tags
+        post.is_published = is_published
+        post.tags = post.tags.add(*tags)
         post.save()
 
     @staticmethod
@@ -102,3 +95,7 @@ class Post:
         """
         post = Post.get_post_by_slug(post_slug)
         post.delete()
+
+    @staticmethod
+    def get_published_posts():
+        return models.Post.objects.filter(is_published=True)

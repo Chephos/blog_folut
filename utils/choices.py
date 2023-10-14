@@ -8,3 +8,4 @@ class CategoryChoices(models.TextChoices):
     LIFESTYLE = "Lifestyle", "Lifestyle"
     FITNESS = "Fitness", "Fitness"
     ENTERTAINMENT = "Entertainment", "Entertainment"
+    INSPIRATION = "Inspiration", "Inspiration"

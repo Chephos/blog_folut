@@ -17,7 +17,7 @@ class Post(BaseModel):
     slug = models.SlugField(max_length=15000, unique=True)
     subtitle = models.CharField(max_length=150, blank=True)
     content = models.TextField(blank=True)
-    cover_photo = models.ImageField(upload_to="cover_photos")
+    cover_photo = models.ImageField(upload_to="cover_photos/", blank=True, null=True)
     category = models.CharField(max_length=50, choices=choices.CategoryChoices.choices)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = TaggableManager()
@@ -31,3 +31,10 @@ class Post(BaseModel):
 
     def __str__(self):
         return self.title[:20] + "..."
+
+    def get_absolute_url(self, *args, **kwargs):
+        return 
+    class Meta:
+        ordering = [
+            "-published_at",
+        ]

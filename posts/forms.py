@@ -17,21 +17,30 @@ class PostCreateForm(forms.ModelForm):
         ]
 
     def clean(self):
-            cleaned_data = super().clean()
-            is_published = cleaned_data.get("is_published")
-            content = cleaned_data.get("content")
+        cleaned_data = super().clean()
+        is_published = cleaned_data.get("is_published")
+        content = cleaned_data.get("content")
 
-            if is_published is True:
-                if content == "":
-                    raise forms.ValidationError("Content is required")
+        if is_published is True:
+            if content == "":
+                raise forms.ValidationError("Content is required")
 
-            return cleaned_data
+        return cleaned_data
 
 
 class PostUpdateForm(PostCreateForm):
     pass
 
-    # def clean_content(self):
-    #     content = self.cleaned_data.get("content")
-    #     if not content:
-    #         raise forms.ValidationError("Content is required")
+
+class CommentCreateForm(forms.ModelForm):
+    class Meta:
+        model = models.Comment
+        fields = [
+            "content",
+        ]
+
+    def clean_content(self):
+        content = self.cleaned_data["content"]
+        if content == "":
+            raise forms.ValidationError("You must say something :)")
+        return content

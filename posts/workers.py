@@ -99,3 +99,35 @@ class Post:
     @staticmethod
     def get_published_posts():
         return models.Post.objects.filter(is_published=True)
+
+
+class Comment:
+    @staticmethod
+    def get_active_comments_for_post(post):
+        return post.comments.filter(is_active=True)
+    
+    @staticmethod
+    def get_comment_by_id(comment_id: int):
+        """
+        Gets comment by id
+        :param comment_id: id of the comment
+        :return: comment
+        :raises: Http404
+        """
+        comment = get_object_or_404(models.Comment, id=comment_id)
+        return comment
+    
+    @staticmethod
+    def get_post_by_comment_id(comment_id):
+        comment = Comment.get_comment_by_id(comment_id)
+        return comment.post
+
+    @staticmethod
+    def delete_comment(comment_id: int):
+        """
+        Deletes a comment
+        :param comment_id: id of the comment
+        :return: None
+        """
+        comment = Comment.get_comment_by_id(comment_id)
+        comment.delete()

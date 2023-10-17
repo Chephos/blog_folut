@@ -45,6 +45,7 @@ class Comment(BaseModel):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
+    parent = models.ForeignKey('self' , null=True , blank=True , on_delete=models.CASCADE , related_name='replies')
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -54,3 +55,13 @@ class Comment(BaseModel):
         ordering = [
             "-created_at",
         ]
+
+    @property
+    def children(self):
+        return Comment.objects.filter(parent=self)
+    
+    @property
+    def is_parent(self):
+        if self.parent is None:
+            return True
+        return False

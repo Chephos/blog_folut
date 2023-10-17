@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from . import models
 
@@ -37,7 +38,14 @@ class CommentCreateForm(forms.ModelForm):
         model = models.Comment
         fields = [
             "content",
+            "parent",
         ]
+        labels = {
+            'content': _(''),
+        }
+        widgets = {
+            'content' : forms.TextInput(),
+        }
 
     def clean_content(self):
         content = self.cleaned_data["content"]

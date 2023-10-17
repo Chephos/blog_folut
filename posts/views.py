@@ -83,8 +83,13 @@ class CommentCreateView(View):
         form = forms.CommentCreateForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
+            try:
+                    parent = form.cleaned_data['parent']
+            except:
+                    parent=None
             comment.post = post
             comment.author = request.user
+            comment.parent = parent
             comment.save()
             return redirect("posts:post_detail", post_slug=post.slug)
         return render(request, "posts/detail.html", {"post": post, "form": form})

@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 <form action="{% url 'posts:comment_create' post.slug %}" method="post">
-    {{ form.content }}
+    {{ form | crispy }}
     {% csrf_token %}
     <p><input type="submit" value="Add comment"></p>
 </form>

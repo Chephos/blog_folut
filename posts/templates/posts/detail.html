@@ -23,72 +23,30 @@
                     </form>
                 </div>
                 {% endif %}
-                {% if user.is_authenticated %}
                 {% include "posts/includes/comment_form.html"%}
                 {% for comment in comments %}
-                {% if comment.is_parent %}
                 <div class="card-footer">
                     <p class="info">
                         <a href="#">{{ comment.author.username }}</a>
                         {{ comment.created_at }}
                     </p>
                     {{ comment.content|linebreaks }}
-
                     {% if user.is_authenticated and user == post.author %}
+
+
                     <form action="{% url 'posts:comment_delete' comment.id %}" method="POST" class="d-inline">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
+
                     {% endif %}
 
-                    <div class="comment">
-                        {% for reply in comment.children %}
-                        <div class="comment-reply">
-                            <p class="info"><a href="#">{{ reply.author.username }}</a></p>
-                            <div class="comment-content">
-                                {{ reply.content|linebreaks }}
-                            </div>
-                            {% if user.is_authenticated and user == post.author %}
-                            <form action="{% url 'posts:comment_delete' reply.id %}" method="POST" class="d-inline">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger">Delete</button>
-                            </form>
-                            {% endif %}
-                            <div class="comment-reply"> <!-- Apply a deeper level of indentation -->
-                                {% for nested_reply in reply.children %}
-                                <div class="comment-reply">
-                                    <p class="info"><a href="#">{{ nested_reply.author.username }}</a></p>
-                                    <div class="comment-content">
-                                        {{ nested_reply.content|linebreaks }}
-                                    </div>
-                                    <!-- Add a delete button if needed -->
-                                </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-
-
                 </div>
-                {% endif %}
-
-                <form action="{% url 'posts:comment_create' post.slug %}" method="POST" class="comment_form">
-
-                    <label for="comment">Reply here</label>
-                    <input type="text" name="content"> <input type="hidden" value="{{ comment.pk }}" name="parent"> {% csrf_token %} <input type="submit" value="Reply">
-
-                </form>
+                {% empty %}
+                <p>Be the first to comment:)</p>
+                {% endfor %}
             </div>
-
-            {% empty %}
-            <p>Be the first to comment:)</p>
-            {% endfor %}
-            {% else %}
-            <p>Please <a href="{% url 'login' %}">login</a> to comment.</p>
-            {% endif %}
         </div>
     </div>
-</div>
 </div>
 {% endblock content %}

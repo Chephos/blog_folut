@@ -38,6 +38,10 @@ class CommentCreateForm(forms.ModelForm):
         fields = [
             "content",
         ]
+        labels = {"content": ("")}
+        widgets = {
+            "content": forms.TextInput(),
+        }
 
     def clean_content(self):
         content = self.cleaned_data["content"]

@@ -27,7 +27,7 @@
                 {% for comment in comments %}
                 <div class="card-footer">
                     <p class="info">
-                        <a href="#">{{ comment.author.username }}</a>
+                        <a href="{% url 'users:user_detail' comment.author.username %}">@{{ comment.author.username }}</a>
                         {{ comment.created_at }}
                     </p>
                     {{ comment.content|linebreaks }}

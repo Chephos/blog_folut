@@ -19,7 +19,7 @@ class Post(BaseModel):
     content = models.TextField(blank=True)
     cover_photo = models.ImageField(upload_to="cover_photos/", blank=True, null=True)
     category = models.CharField(max_length=50, choices=choices.CategoryChoices.choices)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     tags = TaggableManager()
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)

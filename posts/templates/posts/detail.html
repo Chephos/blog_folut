@@ -1,19 +1,28 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block content %}
 <div class="container">
     <div class="row">
         <div class="col-md-8 offset-md-2">
             <div class="card">
-
                 <div class="card-header">
                     <h3>{{ post.title }}</h3>
                     <small>by {{ post.author.username }} on {{ post.published_at|date:"F d, Y" }}</small>
-                    <img src="{{ post.cover_photo.url }}" class="card-img-top" alt="{{ post.title }}">
                 </div>
+                <img src="{{ post.cover_photo.url }}" class="card-img-top" alt="{{ post.title }}">
                 <div class="card-body">
                     <p>{{ post.content }}</p>
                 </div>
+                {% with total_likes=post.likes.count total_dislikes=post.dislikes.count %}
+                <div class="card-footer">
+                    <button class="btn btn-primary like-button" data-post-id="{{ post.id }}">Like</button>
+                    <button class="btn btn-danger dislike-button" data-post-id="{{ post.id }}">Dislike</button>
+                    <span class="badge badge-success likes-count">{{ total_likes }}</span>
+                    <span class="badge badge-danger dislikes-count">{{ total_dislikes }}</span>
+                </div>
+                {% endwith %}
                 {% if user.is_authenticated and user == post.author %}
                 <div class="card-footer">
                     <a href="{% url 'posts:post_update' post.slug %}" class="btn btn-primary">Edit</a>
@@ -31,19 +40,22 @@
                         {{ comment.created_at }}
                     </p>
                     {{ comment.content|linebreaks }}
+                    <button class="btn btn-primary like-comment-button" data-comment-id="{{ comment.id }}">Like</button>
+                    <button class="btn btn-danger dislike-comment-button"
+                        data-comment-id="{{ comment.id }}">Dislike</button>
+                    <span class="badge badge-success comment-likes-count">{{ comment.likes.count }}</span>
+                    <span class="badge badge-danger comment-dislikes-count">{{ comment.dislikes.count }}</span>
                     {% if user.is_authenticated and user == post.author %}
-
-
-                    <form action="{% url 'posts:comment_delete' comment.id %}" method="POST" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
-
+                    <div class="card-footer">
+                        <form action="{% url 'posts:comment_delete' comment.id %}" method="POST" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
                     {% endif %}
-
                 </div>
                 {% empty %}
-                <p>Be the first to comment:)</p>
+                <p>Be the first to comment :)</p>
                 {% endfor %}
             </div>
         </div>

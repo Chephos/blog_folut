@@ -21,4 +21,20 @@ urlpatterns = [
         views.CommentDeleteView.as_view(),
         name="comment_delete",
     ),
+    path("post/like/<int:post_id>/", views.LikePostView.as_view(), name="like_post"),
+    path(
+        "post/dislike/<int:post_id>/",
+        views.DislikePostView.as_view(),
+        name="dislike_post",
+    ),
+    path(
+        "comment/like/<int:comment_id>/",
+        views.LikeCommentView.as_view(),
+        name="like_comment",
+    ),
+    path(
+        "comment/dislike/<int:comment_id>/",
+        views.DislikeCommentView.as_view(),
+        name="dislike_comment",
+    ),
 ]

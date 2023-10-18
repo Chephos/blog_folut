@@ -23,6 +23,8 @@ class Post(BaseModel):
     tags = TaggableManager()
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)
+    likes = models.ManyToManyField(User, related_name="liked_posts")
+    dislikes = models.ManyToManyField(User, related_name="disliked_posts")
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -46,6 +48,8 @@ class Comment(BaseModel):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
     content = models.TextField()
     is_active = models.BooleanField(default=True)
+    likes = models.ManyToManyField(User, related_name="liked_comments")
+    dislikes = models.ManyToManyField(User, related_name="disliked_comments")
 
     def __str__(self):
         return f"{self.author.username} commented '{self.content[:20]}'..."

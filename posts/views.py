@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
 from django.views import View
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 from . import workers
 from . import forms
-from . import models
+from . import helpers
 
 # Create your views here.
 
@@ -38,7 +39,7 @@ class PostListView(View):
         )
 
 
-class PostCreateView(View):
+class PostCreateView(LoginRequiredMixin, View):
     def get(self, request):
         form = forms.PostCreateForm()
         return render(request, "posts/create.html", {"form": form})
@@ -52,7 +53,7 @@ class PostCreateView(View):
         return render(request, "posts/create.html", {"form": form})
 
 
-class PostUpdateView(View):
+class PostUpdateView(LoginRequiredMixin, View):
     def get(self, request, post_slug):
         post = workers.Post.get_post_by_slug(post_slug)
         form = forms.PostUpdateForm(instance=post)
@@ -67,7 +68,7 @@ class PostUpdateView(View):
         return render(request, "posts/update.html", {"form": form, "post": post})
 
 
-class PostDeleteView(View):
+class PostDeleteView(LoginRequiredMixin, View):
     def get(self, request, post_slug):
         post = workers.Post.get_post_by_slug(post_slug)
         return render(request, "posts/delete.html", {"post": post})
@@ -77,7 +78,7 @@ class PostDeleteView(View):
         return redirect("posts:post_list")
 
 
-class CommentCreateView(View):
+class CommentCreateView(LoginRequiredMixin, View):
     def post(self, request, post_slug):
         post = workers.Post.get_post_by_slug(post_slug)
         form = forms.CommentCreateForm(request.POST)
@@ -90,8 +91,52 @@ class CommentCreateView(View):
         return render(request, "posts/detail.html", {"post": post, "form": form})
 
 
-class CommentDeleteView(View):
+class CommentDeleteView(LoginRequiredMixin, View):
     def post(self, request, comment_id):
         post = workers.Comment.get_post_by_comment_id(comment_id)
         workers.Comment.delete_comment(comment_id)
         return redirect("posts:post_detail", post_slug=post.slug)
+
+
+class LikePostView(LoginRequiredMixin, View):
+    def post(self, request, post_id):
+        helpers.toggle_like_for_post(request.user, post_id)
+        post = workers.Post._get_post_by_id(post_id)
+        likes_count = post.likes.count()
+        dislikes_count = post.dislikes.count()
+        return JsonResponse(
+            {"likes_count": likes_count, "dislikes_count": dislikes_count}
+        )
+
+
+class LikeCommentView(LoginRequiredMixin, View):
+    def post(self, request, comment_id):
+        helpers.toggle_like_for_comment(request.user, comment_id)
+        comment = workers.Comment.get_comment_by_id(comment_id)
+        likes_count = comment.likes.count()
+        dislikes_count = comment.dislikes.count()
+        return JsonResponse(
+            {"likes_count": likes_count, "dislikes_count": dislikes_count}
+        )
+
+
+class DislikePostView(LoginRequiredMixin, View):
+    def post(self, request, post_id):
+        helpers.toggle_dislike_for_post(request.user, post_id)
+        post = workers.Post._get_post_by_id(post_id)
+        dislikes_count = post.dislikes.count()
+        likes_count = post.likes.count()
+        return JsonResponse(
+            {"dislikes_count": dislikes_count, "likes_count": likes_count}
+        )
+
+
+class DislikeCommentView(LoginRequiredMixin, View):
+    def post(self, request, comment_id):
+        helpers.toggle_dislike_for_comment(request.user, comment_id)
+        comment = workers.Comment.get_comment_by_id(comment_id)
+        dislikes_count = comment.dislikes.count()
+        likes_count = comment.likes.count()
+        return JsonResponse(
+            {"dislikes_count": dislikes_count, "likes_count": likes_count}
+        )

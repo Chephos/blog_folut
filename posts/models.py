@@ -17,14 +17,16 @@ class Post(BaseModel):
     slug = models.SlugField(max_length=15000, unique=True)
     subtitle = models.CharField(max_length=150, blank=True)
     content = models.TextField(blank=True)
-    cover_photo = models.ImageField(upload_to="cover_photos/", blank=True, null=True)
+    cover_photo = models.ImageField(
+        upload_to="cover_photos/", default="cover_photos/iba.jpg", blank=True, null=True
+    )
     category = models.CharField(max_length=50, choices=choices.CategoryChoices.choices)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     tags = TaggableManager()
     is_published = models.BooleanField(default=False)
     published_at = models.DateTimeField(blank=True, null=True)
-    likes = models.ManyToManyField(User, related_name="liked_posts")
-    dislikes = models.ManyToManyField(User, related_name="disliked_posts")
+    likes = models.ManyToManyField(User, related_name="liked_posts", blank=True)
+    dislikes = models.ManyToManyField(User, related_name="disliked_posts", blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

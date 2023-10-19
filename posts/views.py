@@ -77,6 +77,13 @@ class PostDeleteView(LoginRequiredMixin, View):
         workers.Post.delete_post(post_slug)
         return redirect("posts:post_list")
 
+class DraftListView(LoginRequiredMixin, View):
+    def get(self, request):
+        drafts = workers.Post.get_drafts_for_user(request.user)
+        pagintor = Paginator(drafts, 25)
+        page_number = request.GET.get("page", 1)
+        page_obj = pagintor.get_page(page_number)
+        return render(request, "posts/drafts.html", {"drafts_page_obj": page_obj})
 
 class CommentCreateView(LoginRequiredMixin, View):
     def post(self, request, post_slug):

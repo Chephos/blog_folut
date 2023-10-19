@@ -7,10 +7,15 @@ Login Here
 {% load crispy_forms_tags %}
 
 {% block content %}
-     <form method="post" class="from-group">
+<form method="post" class="from-group">
 	{% csrf_token %}
 	{{form|crispy}}
 	<p>Don't have an accoount? Create one <a href="{% url 'users:register' %}">here</a></p>
-	<button type="submit" class="btn btn-success">Login</button>	
-    </form>
+	<button type="submit" class="btn btn-success">Login</button>
+	<p>
+		<a href="{% url 'password_reset' %}">
+			Forgotten your password?
+		</a>
+	</p>
+</form>
 {% endblock %}

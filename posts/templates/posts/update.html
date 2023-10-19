@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
+{% block title%}
+{{post.title}} - Edit
+{%endblock title%}
+
 {% block content %}
 <div class="container">
 
-    <h1>Edit "{{ post.title }}"</h1>
+    <h1>Edit "<a href="{% url 'posts:post_detail' post.slug %}">{{ post.title }}</a>"</h1>
 
     <form method="POST" action="{% url 'posts:post_update' post.slug %}" enctype='multipart/form-data'>
 

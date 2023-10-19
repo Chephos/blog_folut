@@ -29,7 +29,7 @@ class Post:
 
     @staticmethod
     def create_post(
-        user, title, subtitle, cover_photo, content, category, tags, is_published
+        user, title, subtitle, cover_photo, content, category, tags, is_published, published_at=""
     ):
         """
         Creates a post
@@ -51,6 +51,7 @@ class Post:
             category=category,
             is_published=is_published,
             tags=tags,
+            published_at=published_at
         )
         return post
 
@@ -64,6 +65,7 @@ class Post:
         category: str,
         tags,
         is_published: bool,
+        published_at=""
     ):
         """
         Updates a post
@@ -84,6 +86,7 @@ class Post:
         post.category = category
         post.is_published = is_published
         post.tags = post.tags.add(*tags)
+        post.published_at = published_at
         post.save()
 
     @staticmethod
@@ -99,6 +102,10 @@ class Post:
     @staticmethod
     def get_published_posts():
         return models.Post.objects.filter(is_published=True)
+    
+    @staticmethod
+    def get_drafts_for_user(user):
+        return user.posts.filter(is_published=False)
 
 
 class Comment:

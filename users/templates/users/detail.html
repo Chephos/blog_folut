@@ -2,17 +2,27 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="mt-4">User Profile: {{ user.username }}</h1>
-    
+    <a href="{% url 'password_change'%}">change password</a>
     <div class="row mt-4">
-        <div class="col-md-12">
+        <div class="col-md-4">
+            <!-- User Profile Photo -->
+            <img src="{{ user.profile_photo.url }}" class="img-fluid rounded-circle" alt="{{ user.username }}">
+
+            <!-- User Bio -->
+            <div class="mt-3">
+                <h3>@{{ user.username }}</h3>
+                <p>{{ user.bio }}</p>
+                
+                
+            </div>
+        </div>
+        <div class="col-md-8">
             <h2>Posts and Comments by {{ user.username }}</h2>
             <ul class="list-group">
                 {% for post in user_posts %}
                     <li class="list-group-item">
                         <a href="{% url 'posts:post_detail' post.slug %}">{{ post.title }}</a>
                         {{ post.content|linebreaks}}
-
                     </li>
                 {% empty %}
                     <li class="list-group-item">No posts available.</li>
@@ -20,7 +30,7 @@
                 
                 {% for comment in user_comments %}
                     <li class="list-group-item">
-                        {{ comment.post.title|linebreaks}} (comment)
+                        {{ comment.post.title|linebreaks }} (comment)
                         <a href="{% url 'posts:post_detail' comment.post.slug %}">{{ comment.content }}</a>    
                     </li>
                 {% empty %}
@@ -31,4 +41,3 @@
     </div>
 </div>
 {% endblock content %}
-

@@ -2,6 +2,9 @@
 
 {% load static %}
 
+{% block title%}
+{{ post.title }} - Folut
+{% endblock title %}
 {% block content %}
 <div class="container">
     <div class="row">
@@ -9,40 +12,44 @@
             <div class="card">
                 <div class="card-header">
                     <h3>{{ post.title }}</h3>
-                    <small>by {{ post.author.username }} on {{ post.published_at|date:"F d, Y" }}</small>
+                    <small>by {{ post.author.username }} on {% if post.published_at %}{{ post.published_at|date:"F d,Y"}}{%else%}{{post.created_at|date:"F d, Y"}}{%endif%}</small>
                 </div>
-                <img src="{{ post.cover_photo.url }}" class="card-img-top" alt="{{ post.title }}">
+                <img src="{{ post.cover_photo.url }}" class="card-img-top img-thumbnail" alt="{{ post.title }}">
                 <div class="card-body">
                     <p>{{ post.content }}</p>
                 </div>
                 {% with total_likes=post.likes.count total_dislikes=post.dislikes.count %}
                 <div class="card-footer">
+                    {% if user.is_authenticated %}
                     <button class="btn btn-primary like-button" data-post-id="{{ post.id }}">Like</button>
                     <button class="btn btn-danger dislike-button" data-post-id="{{ post.id }}">Dislike</button>
+                    {% endif %}
                     <span class="badge badge-success likes-count">{{ total_likes }}</span>
                     <span class="badge badge-danger dislikes-count">{{ total_dislikes }}</span>
                 </div>
                 {% endwith %}
+
                 {% if user.is_authenticated and user == post.author %}
                 <div class="card-footer">
                     <a href="{% url 'posts:post_update' post.slug %}" class="btn btn-primary">Edit</a>
-                    <form action="{% url 'posts:post_delete' post.slug %}" method="POST" class="d-inline">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
+
+                    <a href="{%url 'posts:post_delete' post.slug %}" class="btn btn-danger">Delete</a>
+
                 </div>
                 {% endif %}
                 {% include "posts/includes/comment_form.html"%}
                 {% for comment in comments %}
                 <div class="card-footer">
                     <p class="info">
-                        <a href="{% url 'users:user_detail' comment.author.username %}">@{{ comment.author.username }}</a>
-                        {{ comment.created_at }}
+                        <a href="{% url 'users:user_detail' comment.author.username %}">@{{ comment.author.username}}</a>
+                        <p>{{ comment.created_at }}</p>
                     </p>
                     {{ comment.content|linebreaks }}
+                    {% if user.is_authenticated %}
                     <button class="btn btn-primary like-comment-button" data-comment-id="{{ comment.id }}">Like</button>
                     <button class="btn btn-danger dislike-comment-button"
                         data-comment-id="{{ comment.id }}">Dislike</button>
+                    {% endif %}
                     <span class="badge badge-success comment-likes-count">{{ comment.likes.count }}</span>
                     <span class="badge badge-danger comment-dislikes-count">{{ comment.dislikes.count }}</span>
                     {% if user.is_authenticated and user == post.author %}

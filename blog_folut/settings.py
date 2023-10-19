@@ -147,3 +147,5 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 TAGGIT_CASE_INSENSITIVE = True
 
 LOGIN_REDIRECT_URL = "posts:post_list"
+LOGOUT_REDIRECT_URL = "posts:post_list"
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

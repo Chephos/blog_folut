@@ -9,7 +9,6 @@
     <ul>
 
         <li><a href="{% url 'posts:post_create'%}">Create Post</a></li>
-        <li><a href="{%url 'posts:post_drafts'%}">Drafts</a></li>
         <li><a href="{% url 'users:user_detail' user.username %}">Profile</a></li>
         <li>
             <a href="{% url 'users:profile_update' %}">Update Profile</a>
@@ -25,8 +24,8 @@
 
 
     <div class="row">
-        {% for post in published_posts_page_obj %}
-        {% if post.is_published %}
+        {% for post in drafts_page_obj %}
+        
         <div class="col-md-4">
             <div class="card mb-4 shadow-sm">
                 <img src="{{ post.cover_photo.url }}" class="card-img-top" alt="{{ post.title }}">
@@ -43,14 +42,14 @@
                 </div>
             </div>
         </div>
-        {% endif %}
+        
         {% empty %}
         <div class="col-md-12">
             <p>No posts yet.</p>
         </div>
         {% endfor %}
     </div>
-    {% include "pagination.html" with page=published_posts_page_obj %}
+    {% include "pagination.html" with page=drafts_page_obj %}
 </div>
 
 {% endblock content %}

@@ -24,7 +24,7 @@
                     <button class="btn btn-primary like-button" data-post-id="{{ post.id }}">Like</button>
                     <button class="btn btn-danger dislike-button" data-post-id="{{ post.id }}">Dislike</button>
                     {% endif %}
-                    <span class="badge badge-success likes-count">{{ total_likes }}</span>
+                    <span class="badge badge-primary likes-count">{{ total_likes }}</span>
                     <span class="badge badge-danger dislikes-count">{{ total_dislikes }}</span>
                 </div>
                 {% endwith %}
@@ -50,7 +50,7 @@
                     <button class="btn btn-danger dislike-comment-button"
                         data-comment-id="{{ comment.id }}">Dislike</button>
                     {% endif %}
-                    <span class="badge badge-success comment-likes-count">{{ comment.likes.count }}</span>
+                    <span class="badge badge-primary comment-likes-count">{{ comment.likes.count }}</span>
                     <span class="badge badge-danger comment-dislikes-count">{{ comment.dislikes.count }}</span>
                     {% if user.is_authenticated and user == post.author %}
                     <div class="card-footer">

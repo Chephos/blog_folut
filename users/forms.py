@@ -6,6 +6,7 @@ User = get_user_model()
 
 
 class Register(UserCreationForm):
+    email = forms.EmailField(required=True)
     class Meta:
         model = User
         fields = ["username", "email", "bio", "profile_photo", "password1", "password2"]

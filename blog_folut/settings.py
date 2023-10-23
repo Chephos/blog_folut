@@ -32,7 +32,7 @@ environ.Env.read_env(BASE_DIR / ".env")
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", "False") == "True"
+DEBUG = env("DEBUG", "0").lower() in ["1", "true", "t"]
 
 ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 DEVELOPMENT_MODE = env("DEVELOPMENT_MODE", "False") == "True"
@@ -101,19 +101,9 @@ WSGI_APPLICATION = "blog_folut.wsgi.application"
 # }
 
 
-if DEVELOPMENT_MODE is True:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-    if env("DATABASE_URL", None) is None:
-        raise Exception("DATABASE_URL environment variable not defined")
-    DATABASES = {
-        "default": dj_database_url.parse(env("DATABASE_URL")),
-    }
+DATABASES = {
+    'default': dj_database_url.parse(env('DATABASE_URL'), conn_max_age=600),
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

@@ -4,10 +4,10 @@
 
 {% block content %}
 <div class="container">
-    <h1>All Published Blog Posts</h1>
     {% if user.is_authenticated %}
+    <h1>Hello, {{ user.username }}</h1>
     <ul>
-
+        
         <li><a href="{% url 'posts:post_create'%}">Create Post</a></li>
         <li><a href="{%url 'posts:post_drafts'%}">Drafts</a></li>
         <li><a href="{% url 'users:user_detail' user.username %}">Profile</a></li>
@@ -20,6 +20,7 @@
         </li>
     </ul>
     {% else %}
+    <h1>Welcome to Folut blog</h1>
     <a href="{% url 'login' %}">Login</a> | <a href="{% url 'users:register' %}">Sign Up</a>
     {% endif %}
     <hr>
@@ -33,6 +34,7 @@
                 <img src="{{ post.cover_photo.url }}" class="card-img-top" alt="{{ post.title }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ post.title }}</h5>
+                    <small class="card-title">by {{post.author}}</small>
                     <p class="card-text">{{ post.content|truncatewords:30 }}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">

@@ -1,3 +1,5 @@
+import datetime
+
 from django.utils import timezone
 from django.shortcuts import get_object_or_404
 
@@ -42,6 +44,9 @@ class Post:
         :param tags: tags of the post
         :return: post
         """
+        if published_at is True:
+            published_at = datetime.datetime.fromisoformat(str(published_at))
+
         post = models.Post.objects.create(
             author=user,
             title=title,
@@ -78,6 +83,9 @@ class Post:
         :param tags: tags of the post
         :return: None
         """
+        if published_at is True:
+            published_at = datetime.datetime.fromisoformat(str(published_at))
+
         post = Post.get_post_by_slug(post_slug)
         post.title = title
         post.subtitle = subtitle

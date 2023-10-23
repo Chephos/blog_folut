@@ -11,31 +11,32 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from pathlib import Path
 
-import environ
+import os
+from dotenv import load_dotenv
 import sys
 import dj_database_url
 
-env = environ.Env(
-    # set casting, default value
-    DEBUG=(bool, False)
-)
+# env = environ.Env(
+#     # set casting, default value
+#     DEBUG=(bool, False)
+# )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-environ.Env.read_env(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / '.env')
+# environ.Env.read_env(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", "0").lower() in ["1", "true", "t"]
+DEBUG = os.getenv("DEBUG", "0").lower() in ["1", "true", "t"]
 
-ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
-DEVELOPMENT_MODE = env("DEVELOPMENT_MODE", "False") == "True"
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+# DEVELOPMENT_MODE = osenv("DEVELOPMENT_MODE", "False") == "True"
 
 
 # Application definition
@@ -102,7 +103,7 @@ WSGI_APPLICATION = "blog_folut.wsgi.application"
 
 
 DATABASES = {
-    'default': dj_database_url.parse(env('DATABASE_URL'), conn_max_age=600),
+    'default': dj_database_url.parse(os.getenv('DATABASE_URL'), conn_max_age=600),
 }
 
 # Password validation

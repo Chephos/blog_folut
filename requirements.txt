@@ -14,3 +14,5 @@ sqlparse==0.4.4
 typing_extensions==4.8.0
 tzdata==2023.3
 python-dotenv==0.21.0
+whitenoise==6.2.0
+Brotli==1.0.9

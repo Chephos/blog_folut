@@ -166,4 +166,4 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-LOGIN_URL = "/auth/login"
+# LOGIN_URL = "/auth/login"

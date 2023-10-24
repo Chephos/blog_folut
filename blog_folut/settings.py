@@ -186,6 +186,6 @@ LOGIN_REDIRECT_URL = "posts:post_list"
 LOGOUT_REDIRECT_URL = "posts:post_list"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # LOGIN_URL = "/auth/login"

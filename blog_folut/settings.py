@@ -168,7 +168,9 @@ else:
     MEDIA_ROOT = BASE_DIR / "media"
 
 STORAGES = {
-    "default": {"blog_folut.storage_backends.PublicMediaStorage"},
+    "default": {
+        "BACKEND": "blog_folut.storage_backends.PublicMediaStorage",
+    },
     "staticfiles": "blog_folut.storage_backends.StaticStorage",
 }
 

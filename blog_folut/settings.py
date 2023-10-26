@@ -156,6 +156,7 @@ if USE_S3:
         "CacheControl": "max-age=86400",
     }
     AWS_S3_BUCKET_NAME_STATIC = "blog-folut-bucket"
+    AWS_S3_REGION_NAME = "us-west-2"
     STATIC_LOCATION = "static"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
     # STATICFILES_STORAGE = "blog_folut.storage_backends.StaticStorage"

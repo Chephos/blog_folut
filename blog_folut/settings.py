@@ -156,11 +156,11 @@ if USE_S3:
     }
     STATIC_LOCATION = "static"
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/"
-    STATICFILES_STORAGE = "blog_folut.storage_backends.StaticStorage"
+    # STATICFILES_STORAGE = "blog_folut.storage_backends.StaticStorage"
     # s3 public media settings
     PUBLIC_MEDIA_LOCATION = "media"
     MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/"
-    DEFAULT_FILE_STORAGE = "blog_folut.storage_backends.PublicMediaStorage"
+    # DEFAULT_FILE_STORAGE = "blog_folut.storage_backends.PublicMediaStorage"
 else:
     STATIC_URL = "static/"
     STATIC_ROOT = BASE_DIR / "staticfiles"
@@ -171,7 +171,9 @@ STORAGES = {
     "default": {
         "BACKEND": "blog_folut.storage_backends.PublicMediaStorage",
     },
-    "staticfiles": "blog_folut.storage_backends.StaticStorage",
+    "staticfiles": {
+        "BACKEND": "blog_folut.storage_backends.StaticStorage",
+    },
 }
 
 STATICFILES_DIRS = [
